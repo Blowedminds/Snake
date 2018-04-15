@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * A drawable panel structured as a grid.
- * Provides some drawing methods suitable for pixel-like game entities.
+ * Provides some drawing methods suitable for pixel-like GridGame entities.
  *
  * IMPORTANT: Please do not modify this class in any way,
  * it will be reset when grading your project.
