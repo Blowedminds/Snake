@@ -5,6 +5,7 @@ import game.Direction;
 import game.GridGame;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,9 +33,7 @@ public class Game extends GridGame {
 
         for (Snake snake : snakeCopy) {
             // Choose action
-            Action action = snake.chooseAction();
-
-            updateSnakeCurrentLocation(snake.getSnakeBody(), null);
+            Action action = snake.chooseAction(this.createLocalInformationForSnake(snake));
             // Execute action
             if (action != null) {
                 if (action.getType() == Action.Type.STAY) {
@@ -42,42 +41,57 @@ public class Game extends GridGame {
                     snake.stay();
                 } else if (action.getType() == Action.Type.REPRODUCE) {
                     // REPRODUCE
+                    removeSnake(snake);
                     addSnake(snake.reproduce());
+                    addSnake(snake);
                 } else if (action.getType() == Action.Type.MOVE) {
                     Body snakeHead = snake.getSnakeBody().getLast();
                     // MOVE
                     if (this.isDirectionFree(snakeHead.getX(), snakeHead.getY(), action.getDirection())) {
+                        updateSnakeCurrentLocation(snake.getSnakeBody(), null);
                         snake.move(action.getDirection());
+                        updateSnakeCurrentLocation(snake.getSnakeBody());
                     }
                 } else if (action.getType() == Action.Type.ATTACK) {
 
-//                    Body snakeHead = snake.getSnakeBody().getLast();
-                    // ATTACK
-//                    Body attackedFood = this.getBodyAtDirection(snakeHead.getX(), snakeHead.getY(), action.getDirection());
                     this.addDrawable(snake.attack(action.getDirection()));
                     this.replaceFood();
                 }
             }
-
-            updateSnakeCurrentLocation(snake.getSnakeBody());
         }
     }
 
-    private void updateSnakeCurrentLocation(LinkedList<Body> snakeBody) {
-        for(Body body: snakeBody) {
-            this.updateBodiesMap(body.getX(), body.getY(), body);
-        }
-    }
+    private LocalInformation createLocalInformationForSnake(Snake snake) {
+        Body snakeHead = snake.getSnakeBody().getLast();
+        int x = snakeHead.getX();
+        int y = snakeHead.getY();
 
-    private void updateSnakeCurrentLocation(LinkedList<Body> snakeBody, Body updateBody) {
-        for(Body body: snakeBody) {
-            this.updateBodiesMap(body.getX(), body.getY(), updateBody);
+        HashMap<Direction, Body> bodies = new HashMap<>();
+        bodies.put(Direction.UP, this.getBodyAtPosition(x, y - 1));
+        bodies.put(Direction.DOWN, this.getBodyAtPosition(x, y + 1));
+        bodies.put(Direction.LEFT, this.getBodyAtPosition(x - 1, y));
+        bodies.put(Direction.RIGHT, this.getBodyAtPosition(x + 1, y));
+
+        ArrayList<Direction> freeDirections = new ArrayList<>();
+        if (bodies.get(Direction.UP) == null && this.isPositionInsideGrid(x, y - 1)) {
+            freeDirections.add(Direction.UP);
         }
+        if (bodies.get(Direction.DOWN) == null && this.isPositionInsideGrid(x, y + 1)) {
+            freeDirections.add(Direction.DOWN);
+        }
+        if (bodies.get(Direction.LEFT) == null && this.isPositionInsideGrid(x - 1, y)) {
+            freeDirections.add(Direction.LEFT);
+        }
+        if (bodies.get(Direction.RIGHT) == null && this.isPositionInsideGrid(x + 1, y)) {
+            freeDirections.add(Direction.RIGHT);
+        }
+
+        return new LocalInformation(this.food, freeDirections, bodies);
     }
 
     public void addSnake(Snake snake) {
 
-        snakes.add(snake);
+        this.snakes.add(snake);
 
         for (Body body : snake.getSnakeBody()) {
             if (!isPositionInsideGrid(body.getX(), body.getY())) {
@@ -89,12 +103,36 @@ public class Game extends GridGame {
         }
     }
 
+    private void removeSnake(Snake snake) {
+
+        this.snakes.remove(snake);
+        for (Body body : snake.getSnakeBody()) {
+            if (!isPositionInsideGrid(body.getX(), body.getY())) {
+                continue;
+            }
+
+            this.removeDrawable(body);
+            this.bodiesMap[body.getX()][body.getY()] = null;
+        }
+    }
+
+    private void updateSnakeCurrentLocation(LinkedList<Body> snakeBody) {
+        for (Body body : snakeBody) {
+            this.updateBodiesMap(body.getX(), body.getY(), body);
+        }
+    }
+
+    private void updateSnakeCurrentLocation(LinkedList<Body> snakeBody, Body updateBody) {
+        for (Body body : snakeBody) {
+            this.updateBodiesMap(body.getX(), body.getY(), updateBody);
+        }
+    }
+
     private boolean isPositionInsideGrid(int x, int y) {
         return (x >= 0 && x < this.getGridWidth()) && (y >= 0 && y < this.getGridHeight());
     }
 
     private boolean isDirectionFree(int x, int y, Direction direction) {
-
         if (direction == Direction.UP) {
             y--;
         } else if (direction == Direction.DOWN) {
@@ -108,16 +146,22 @@ public class Game extends GridGame {
     }
 
     private void updateBodiesMap(int x, int y, Body body) {
-        if(isPositionInsideGrid(x, y)) {
+        if (isPositionInsideGrid(x, y)) {
             this.bodiesMap[x][y] = body;
         }
     }
 
     private boolean isPositionFree(int x, int y) {
-        return isPositionInsideGrid(x, y) && getCreatureAtPosition(x, y) == null;
+        if(!isPositionInsideGrid(x, y)) {
+            System.out.println("Snake over drawn");
+        }
+        if(getBodyAtPosition(x, y) != null) {
+            System.out.println("Snake crawled");
+        }
+        return isPositionInsideGrid(x, y) && getBodyAtPosition(x, y) == null;
     }
 
-    private Body getCreatureAtPosition(int x, int y) {
+    private Body getBodyAtPosition(int x, int y) {
         if (!this.isPositionInsideGrid(x, y)) {
             return null;
         }
@@ -125,6 +169,18 @@ public class Game extends GridGame {
     }
 
     private void replaceFood() {
+        this.updateBodiesMap(this.food.getX(), this.food.getY(), null);
 
+        int x = (int) (Math.random() * this.getGridWidth());
+        int y = (int) (Math.random() * this.getGridHeight());
+
+        while(!isPositionFree(x, y)) {
+            x = (int) (Math.random() * this.getGridWidth());
+            y = (int) (Math.random() * this.getGridHeight());
+        }
+
+        this.food.setLocation(x, y);
+
+        this.updateBodiesMap(this.food.getX(), this.food.getY(), food);
     }
 }

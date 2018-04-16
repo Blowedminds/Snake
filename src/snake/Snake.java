@@ -26,18 +26,15 @@ public class Snake {
         return this.snakeBody;
     }
 
-    public Action chooseAction() {
-//        Direction direction = LocalInformation.getRandomDirection(information.getFreeDirections());
-//
+    public Action chooseAction(LocalInformation information) {
+        Body snakeHead = this.snakeBody.getLast();
+
         if (this.canReproduce()) {
-
             return new Action(Action.Type.REPRODUCE);
-        } else if (this.canAttack()) {
-
-            return new Action(Action.Type.ATTACK, Direction.DOWN);
-        } else if (this.canMove()) {
-
-            return new Action(Action.Type.MOVE, Direction.DOWN);
+        } else if (this.canAttack(information)) {
+            return new Action(Action.Type.ATTACK, information.getOptimizedFoodDirection(new Point(snakeHead.getX(), snakeHead.getY())));
+        } else if (this.canMove(information)) {
+            return new Action(Action.Type.MOVE, information.getOptimizedFoodDirection(new Point(snakeHead.getX(), snakeHead.getY())));
         }
 
         return new Action(Action.Type.STAY);
@@ -71,7 +68,7 @@ public class Snake {
             body = nextBody;
         }
 
-        this.moveHeadToDirection(body, direction);
+        this.moveBodyToDirection(body, direction);
     }
 
     public Body attack(Direction direction) {
@@ -79,7 +76,7 @@ public class Snake {
 
         snakeHead = this.addHead(snakeHead.getX(), snakeHead.getY());
 
-        this.moveHeadToDirection(snakeHead, direction);
+        this.moveBodyToDirection(snakeHead, direction);
 
         return snakeHead;
     }
@@ -88,21 +85,20 @@ public class Snake {
 
     }
 
-    private void moveHeadToDirection(Body head, Direction direction) {
+    private void moveBodyToDirection(Body body, Direction direction) {
         if (direction == Direction.DOWN) {
-            head.setLocation(head.getX(), head.getY() + 1);
+            body.setLocation(body.getX(), body.getY() + 1);
         } else if (direction == Direction.UP) {
-            head.setLocation(head.getX(), head.getY() - 1);
+            body.setLocation(body.getX(), body.getY() - 1);
         } else if (direction == Direction.LEFT) {
-            head.setLocation(head.getX() - 1, head.getY());
+            body.setLocation(body.getX() - 1, body.getY());
         } else if (direction == Direction.RIGHT) {
-            head.setLocation(head.getX() + 1, head.getY());
+            body.setLocation(body.getX() + 1, body.getY());
         }
     }
 
     private Body addHead(int x, int y) {
         if (this.snakeBody.size() != 0) {
-
             this.snakeBody.getLast().setColor(Colors.snakeBody);
         }
 
@@ -117,23 +113,11 @@ public class Snake {
         return this.snakeBody.size() >= Snake.reproduceSize;
     }
 
-    private boolean canMove() {
-        return Math.random() > .2;
+    private boolean canMove(LocalInformation information) {
+        return !information.getFreeDirections().isEmpty();
     }
 
-    private boolean canAttack() {
-        return Math.random() > .7;
+    private boolean canAttack(LocalInformation information) {
+        return information.canAttackFood();
     }
-//
-//    @Override
-//    public String toString() {
-//        String result = "";
-//
-//        for (Body snake : this.snakeBody) {
-//
-//            result += snake.getX() + " " + snake.getY() + " \n";
-//        }
-//
-//        return result;
-//    }
 }
