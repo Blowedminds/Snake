@@ -1,5 +1,6 @@
 package main;
 
+import game.Point;
 import snake.Game;
 import snake.Snake;
 import ui.ApplicationWindow;
@@ -13,7 +14,16 @@ public class Main {
             try {
                 // Create GridGame
                 // You can change the world width and height, size of each grid square in pixels or the GridGame speed
-                Game game = new Game(50, 50, 10, 10);
+                Game game = new Game(50, 50, 10, 1);
+
+                Point[] points = {
+                        new Point(10,10),
+                        new Point(11, 10),
+                        new Point(12, 10),
+                        new Point(13, 10)
+                };
+
+                game.addSnake(new Snake(points));
 
                 // Create application window that contains the GridGame panel
                 ApplicationWindow window = new ApplicationWindow(game.getGamePanel());
@@ -21,11 +31,6 @@ public class Main {
 
                 // Start GridGame
                 game.start();
-
-                Snake snake = new Snake(4, 10, 10);
-                game.addSnake(snake);
-                System.out.println(snake.toString());
-
             } catch (Exception e) {
                 e.printStackTrace();
             }

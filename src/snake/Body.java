@@ -1,41 +1,37 @@
 package snake;
 
 import game.Drawable;
+import game.Point;
 import ui.GridPanel;
 
 import java.awt.*;
 
 public class Body implements Drawable {
 
-    private int x, y;
+    private Point point;
 
     private Color color;
 
     public Body(int x, int y, Color color) {
-        this.x = x;
-        this.y = y;
+        this.point = new Point(x, y);
         this.color = color;
     }
 
     @Override
     public void draw(GridPanel panel) {
-        panel.drawSquare(this.x, this.y, this.color);
+        panel.drawSquare(this.point.getX(), this.point.getY(), this.color);
     }
 
     public int getX() {
-        return this.x;
+        return this.point.getX();
     }
 
     public int getY() {
-        return this.y;
+        return this.point.getY();
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y  = y;
+    public void setLocation(int x, int y) {
+        this.point.setLocation(x, y);
     }
 
     public void setColor(Color color) {
