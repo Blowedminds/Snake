@@ -70,6 +70,17 @@ public class LocalInformation {
         return false;
     }
 
+    public Direction getFoodDirection(  ) {
+
+        for(Direction direction: Direction.values()) {
+            if(bodies.get(direction) instanceof Food) {
+                return direction;
+            }
+        }
+
+        return null;
+    }
+
     private int getFoodCoordinateQuadrant(int dx, int dy) {
         if (dx <= 0 && dy < 0) {
             return 1;

@@ -32,7 +32,7 @@ public class Snake {
         if (this.canReproduce()) {
             return new Action(Action.Type.REPRODUCE);
         } else if (this.canAttack(information)) {
-            return new Action(Action.Type.ATTACK, information.getOptimizedFoodDirection(new Point(snakeHead.getX(), snakeHead.getY())));
+            return new Action(Action.Type.ATTACK, information.getFoodDirection());
         } else if (this.canMove(information)) {
             return new Action(Action.Type.MOVE, information.getOptimizedFoodDirection(new Point(snakeHead.getX(), snakeHead.getY())));
         }

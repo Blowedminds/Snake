@@ -19,10 +19,10 @@ public class Main {
                 for (int i = 0; i < 1; i++) {
 
                     Point[] points = {
-                            new Point(10,10 + i),
-                            new Point(11, 10 + i),
-                            new Point(12, 10 + i),
-                            new Point(13, 10 + i)
+                            new Point(1,1 + i),
+                            new Point(2, 1 + i),
+                            new Point(3, 1 + i),
+                            new Point(4, 1 + i)
                     };
 
                     game.addSnake(new Snake(points));

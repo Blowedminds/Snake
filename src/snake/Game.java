@@ -3,6 +3,7 @@ package snake;
 import game.Action;
 import game.Direction;
 import game.GridGame;
+import game.Point;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,28 +36,27 @@ public class Game extends GridGame {
             // Choose action
             Action action = snake.chooseAction(this.createLocalInformationForSnake(snake));
             // Execute action
-            if (action != null) {
-                if (action.getType() == Action.Type.STAY) {
-                    // STAY
-                    snake.stay();
-                } else if (action.getType() == Action.Type.REPRODUCE) {
-                    // REPRODUCE
-                    removeSnake(snake);
-                    addSnake(snake.reproduce());
-                    addSnake(snake);
-                } else if (action.getType() == Action.Type.MOVE) {
-                    Body snakeHead = snake.getSnakeBody().getLast();
-                    // MOVE
-                    if (this.isDirectionFree(snakeHead.getX(), snakeHead.getY(), action.getDirection())) {
-                        updateSnakeCurrentLocation(snake.getSnakeBody(), null);
-                        snake.move(action.getDirection());
-                        updateSnakeCurrentLocation(snake.getSnakeBody());
-                    }
-                } else if (action.getType() == Action.Type.ATTACK) {
-
-                    this.addDrawable(snake.attack(action.getDirection()));
-                    this.replaceFood();
+            if (action.getType() == Action.Type.STAY) {
+                System.out.println("stayed");
+                // STAY
+                snake.stay();
+            } else if (action.getType() == Action.Type.REPRODUCE) {
+                // REPRODUCE
+                removeSnake(snake);
+                addSnake(snake.reproduce());
+                addSnake(snake);
+            } else if (action.getType() == Action.Type.MOVE) {
+                Body snakeHead = snake.getSnakeBody().getLast();
+                // MOVE
+                if (this.isDirectionFree(snakeHead.getX(), snakeHead.getY(), action.getDirection())) {
+                    updateSnakeCurrentLocation(snake.getSnakeBody(), null);
+                    snake.move(action.getDirection());
+                    updateSnakeCurrentLocation(snake.getSnakeBody());
                 }
+            } else if (action.getType() == Action.Type.ATTACK) {
+
+                this.addDrawable(snake.attack(action.getDirection()));
+                this.replaceFood();
             }
         }
     }
@@ -152,10 +152,10 @@ public class Game extends GridGame {
     }
 
     private boolean isPositionFree(int x, int y) {
-        if(!isPositionInsideGrid(x, y)) {
+        if (!isPositionInsideGrid(x, y)) {
             System.out.println("Snake over drawn");
         }
-        if(getBodyAtPosition(x, y) != null) {
+        if (getBodyAtPosition(x, y) != null) {
             System.out.println("Snake crawled");
         }
         return isPositionInsideGrid(x, y) && getBodyAtPosition(x, y) == null;
@@ -173,14 +173,42 @@ public class Game extends GridGame {
 
         int x = (int) (Math.random() * this.getGridWidth());
         int y = (int) (Math.random() * this.getGridHeight());
+        int loop_time = 0;
 
-        while(!isPositionFree(x, y)) {
+
+        while (!isPositionFree(x, y)) {
+            if(loop_time > 10) {
+                Point empty_set = this.findEmptyPlace();
+
+                if(empty_set != null) {
+                    x = empty_set.getX();
+
+                    y = empty_set.getY();
+                }
+
+                break;
+            }
+
             x = (int) (Math.random() * this.getGridWidth());
             y = (int) (Math.random() * this.getGridHeight());
+
+            loop_time++;
         }
 
         this.food.setLocation(x, y);
 
         this.updateBodiesMap(this.food.getX(), this.food.getY(), food);
+    }
+
+    private Point findEmptyPlace() {
+        for(int y = this.getGridHeight() - 1; y > 0; y--) {
+            for(int x = this.getGridWidth() - 1; x > 0; x--) {
+                if(this.bodiesMap[x][y] == null) {
+                    return new Point(x, y);
+                }
+            }
+        }
+
+        return null;
     }
 }
