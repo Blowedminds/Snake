@@ -14,7 +14,7 @@ public class Main {
             try {
                 // Create GridGame
                 // You can change the world width and height, size of each grid square in pixels or the GridGame speed
-                Game game = new Game(50, 50, 10, 30);
+                Game game = new Game(5, 5, 10, 30);
 
                 for (int i = 0; i < 1; i++) {
 

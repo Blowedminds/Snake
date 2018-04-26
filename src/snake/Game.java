@@ -180,11 +180,8 @@ public class Game extends GridGame {
             if(loop_time > 10) {
                 Point empty_set = this.findEmptyPlace();
 
-                if(empty_set != null) {
-                    x = empty_set.getX();
-
-                    y = empty_set.getY();
-                }
+                x = empty_set.getX();
+                y = empty_set.getY();
 
                 break;
             }
@@ -209,6 +206,8 @@ public class Game extends GridGame {
             }
         }
 
-        return null;
+        this.stop();
+
+        return new Point(-1, -1);
     }
 }
