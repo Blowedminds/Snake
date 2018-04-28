@@ -1,4 +1,4 @@
-package snake;
+package bodies;
 
 import game.Drawable;
 import game.Point;

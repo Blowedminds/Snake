@@ -1,9 +1,10 @@
-package snake;
+package bodies;
 
 import game.Action;
 import game.Colors;
 import game.Direction;
 import game.Point;
+import huntersnake.LocalInformation;
 
 import java.util.Iterator;
 import java.util.LinkedList;

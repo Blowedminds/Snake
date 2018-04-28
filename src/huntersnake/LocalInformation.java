@@ -1,7 +1,9 @@
-package snake;
+package huntersnake;
 
 import game.Direction;
 import game.Point;
+import bodies.Body;
+import bodies.Food;
 
 import java.util.*;
 

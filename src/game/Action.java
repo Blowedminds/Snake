@@ -2,7 +2,7 @@ package game;
 
 
 /**
- * Class representing the possible actions for Snake Game
+ * Class representing the possible actions for Snake HunterSnake
  */
 public class Action {
 

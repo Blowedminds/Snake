@@ -1,4 +1,4 @@
-package snake;
+package bodies;
 
 import game.Colors;
 

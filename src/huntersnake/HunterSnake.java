@@ -1,22 +1,25 @@
-package snake;
+package huntersnake;
 
 import game.Action;
 import game.Direction;
 import game.GridGame;
 import game.Point;
+import bodies.Body;
+import bodies.Food;
+import bodies.Snake;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Game extends GridGame {
+public class HunterSnake extends GridGame {
 
     private List<Snake> snakes;
     private Body[][] bodiesMap;
     private Food food;
 
-    public Game(int gridWidth, int gridHeight, int gridSquareSize, int frameRate) {
+    public HunterSnake(int gridWidth, int gridHeight, int gridSquareSize, int frameRate) {
         super(gridWidth, gridHeight, gridSquareSize, frameRate);
 
         this.snakes = new ArrayList<>();
@@ -29,7 +32,7 @@ public class Game extends GridGame {
 
     @Override
     protected void timerTick() {
-        // Determine and execute actions for all creatures
+        // Determine and execute actions for all bodies
         ArrayList<Snake> snakeCopy = new ArrayList<>(this.snakes);
 
         for (Snake snake : snakeCopy) {
@@ -37,7 +40,6 @@ public class Game extends GridGame {
             Action action = snake.chooseAction(this.createLocalInformationForSnake(snake));
             // Execute action
             if (action.getType() == Action.Type.STAY) {
-                System.out.println("stayed");
                 // STAY
                 snake.stay();
             } else if (action.getType() == Action.Type.REPRODUCE) {
@@ -73,16 +75,16 @@ public class Game extends GridGame {
         bodies.put(Direction.RIGHT, this.getBodyAtPosition(x + 1, y));
 
         ArrayList<Direction> freeDirections = new ArrayList<>();
-        if (bodies.get(Direction.UP) == null && this.isPositionInsideGrid(x, y - 1)) {
+        if (this.isPointMovable(new Point(x, y - 1))) {
             freeDirections.add(Direction.UP);
         }
-        if (bodies.get(Direction.DOWN) == null && this.isPositionInsideGrid(x, y + 1)) {
+        if (this.isPointMovable(new Point(x, y + 1))) {
             freeDirections.add(Direction.DOWN);
         }
-        if (bodies.get(Direction.LEFT) == null && this.isPositionInsideGrid(x - 1, y)) {
+        if (this.isPointMovable(new Point(x - 1, y))) {
             freeDirections.add(Direction.LEFT);
         }
-        if (bodies.get(Direction.RIGHT) == null && this.isPositionInsideGrid(x + 1, y)) {
+        if (this.isPointMovable(new Point(x + 1, y))) {
             freeDirections.add(Direction.RIGHT);
         }
 
@@ -101,6 +103,27 @@ public class Game extends GridGame {
             this.addDrawable(body);
             this.bodiesMap[body.getX()][body.getY()] = body;
         }
+    }
+
+    private boolean isPointMovable(Point point){
+
+        int x = point.getX();
+        int y = point.getY();
+
+        if(this.isDirectionFree(x, y , Direction.UP)) {
+            return true;
+        }
+        if(this.isDirectionFree(x, y , Direction.DOWN)) {
+            return true;
+        }
+        if(this.isDirectionFree(x, y , Direction.LEFT)) {
+            return true;
+        }
+        if(this.isDirectionFree(x, y , Direction.RIGHT)) {
+            return true;
+        }
+
+        return false;
     }
 
     private void removeSnake(Snake snake) {
@@ -156,7 +179,7 @@ public class Game extends GridGame {
             System.out.println("Snake over drawn");
         }
         if (getBodyAtPosition(x, y) != null) {
-            System.out.println("Snake crawled");
+//            System.out.println("Snake crawled");
         }
         return isPositionInsideGrid(x, y) && getBodyAtPosition(x, y) == null;
     }

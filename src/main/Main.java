@@ -1,8 +1,8 @@
 package main;
 
 import game.Point;
-import snake.Game;
-import snake.Snake;
+import huntersnake.HunterSnake;
+import bodies.Snake;
 import ui.ApplicationWindow;
 
 import java.awt.*;
@@ -14,7 +14,7 @@ public class Main {
             try {
                 // Create GridGame
                 // You can change the world width and height, size of each grid square in pixels or the GridGame speed
-                Game game = new Game(5, 5, 10, 30);
+                HunterSnake game = new HunterSnake(50, 50, 10, 30);
 
                 for (int i = 0; i < 1; i++) {
 

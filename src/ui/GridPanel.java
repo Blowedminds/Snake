@@ -1,5 +1,7 @@
 package ui;
 
+import game.Colors;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -32,7 +34,7 @@ public class GridPanel extends JPanel {
         gamePanelWidth = gridWidth * gridSquareSize;
         gamePanelHeight = gridHeight * gridSquareSize;
         gameImage = new BufferedImage(gamePanelWidth, gamePanelHeight, BufferedImage.TYPE_INT_ARGB);
-        setBackground(Color.WHITE);
+        setBackground(Colors.canvasBackground);
     }
 
     @Override
@@ -53,7 +55,7 @@ public class GridPanel extends JPanel {
      */
     public void clearCanvas() {
         Graphics g = gameImage.getGraphics();
-        g.setColor(Color.WHITE);
+        g.setColor(Colors.canvasBackground);
         g.fillRect(0, 0, gameImage.getWidth(), getHeight());
         g.dispose();
     }
@@ -79,7 +81,7 @@ public class GridPanel extends JPanel {
      */
     public void drawGrid() {
         Graphics g = gameImage.getGraphics();
-        g.setColor(Color.ORANGE);
+        g.setColor(Colors.gridColor);
 
         // vertical grid
         for (int i = 0; i < gamePanelWidth / gridSquareSize; i++) {
@@ -112,24 +114,4 @@ public class GridPanel extends JPanel {
         g.fillRect(x, y, gridSquareSize - 1, gridSquareSize - 1);
         g.dispose();
     }
-
-    /**
-     * Draws a small filled square in the given grid position
-     * @param gridX x position
-     * @param gridY y position
-     * @param color fill color of the square
-     */
-    public void drawSmallSquare(int gridX, int gridY, Color color) {
-        if (gridX < 0 || gridY < 0 ||
-                gridX >= gamePanelWidth / gridSquareSize || gridY >= gamePanelHeight / gridSquareSize) {
-            return;
-        }
-        Graphics g = gameImage.getGraphics();
-        g.setColor(color);
-        int x = gridX * gridSquareSize + 3;
-        int y = gridY * gridSquareSize + 3;
-        g.fillRect(x, y, gridSquareSize - 5, gridSquareSize - 5);
-        g.dispose();
-    }
-
 }

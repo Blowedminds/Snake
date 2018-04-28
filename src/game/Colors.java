@@ -9,4 +9,8 @@ public class Colors {
     public static Color snakeBody = new Color(255, 136, 0);
 
     public static Color food = new Color(0, 255, 0);
+
+    public static Color canvasBackground = new Color(255, 255, 255);
+
+    public static Color gridColor = new Color(0, 255, 0);
 }
