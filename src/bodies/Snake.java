@@ -1,7 +1,7 @@
 package bodies;
 
 import game.Action;
-import game.Colors;
+import ui.Colors;
 import game.Direction;
 import game.Point;
 import huntersnake.LocalInformation;
@@ -18,15 +18,25 @@ public class Snake {
     public Snake(Point[] points) {
         this.snakeBody = new LinkedList<>();
 
+        //Set the bodies for the given points
         for (Point point : points) {
             this.addHead(point.getX(), point.getY());
         }
     }
 
+    /**
+     * get Snake Body
+     * @return snake body
+     */
     public LinkedList<Body> getSnakeBody() {
         return this.snakeBody;
     }
 
+    /**
+     * Choose an appropriate action for the given LocalInformation
+     * @param information
+     * @return appropriate action
+     */
     public Action chooseAction(LocalInformation information) {
         Body snakeHead = this.snakeBody.getLast();
 
@@ -38,13 +48,20 @@ public class Snake {
             return new Action(Action.Type.MOVE, information.getOptimizedFoodDirection(new Point(snakeHead.getX(), snakeHead.getY())));
         }
 
+        //If nothing is possible, then stay at there
         return new Action(Action.Type.STAY);
     }
 
+    /**
+     * Reproduce the snake
+     * @return reproduced snake
+     */
     public Snake reproduce() {
 
+        //Create a point array for the new snake
         Point[] points = new Point[Snake.reproduceSize / 2];
 
+        //Halve the snake and assign the removed points to new points
         for (int i = Snake.reproduceSize / 2 - 1; this.snakeBody.size() > Snake.reproduceSize / 2; i--) {
 
             Body body = this.snakeBody.remove(0);
@@ -55,11 +72,16 @@ public class Snake {
         return new Snake(points);
     }
 
+    /**
+     * Move the whole snake body to desired direction
+     * @param direction
+     */
     public void move(Direction direction) {
+        //Create an iterator for snake body
         Iterator<Body> iterator = this.snakeBody.iterator();
 
         Body body = iterator.next();
-
+        //Move every body to ancestor
         while (iterator.hasNext()) {
 
             Body nextBody = iterator.next();
@@ -69,23 +91,38 @@ public class Snake {
             body = nextBody;
         }
 
+        //Lastly, move the head to desired direction
         this.moveBodyToDirection(body, direction);
     }
 
+    /**
+     * Add one body to snake body, and move it to desired direction
+     * @param direction
+     * @return new head
+     */
     public Body attack(Direction direction) {
+        //Get head
         Body snakeHead = this.snakeBody.getLast();
-
+        //Add new head with snake head coordinate
         snakeHead = this.addHead(snakeHead.getX(), snakeHead.getY());
-
+        //move the new head to direction
         this.moveBodyToDirection(snakeHead, direction);
 
         return snakeHead;
     }
 
+    /**
+     * Just stay
+     */
     public void stay() {
 
     }
 
+    /**
+     * Move the body to desired direction
+     * @param body
+     * @param direction
+     */
     private void moveBodyToDirection(Body body, Direction direction) {
         if (direction == Direction.DOWN) {
             body.setLocation(body.getX(), body.getY() + 1);
@@ -98,6 +135,12 @@ public class Snake {
         }
     }
 
+    /**
+     * Add a body to head
+     * @param x
+     * @param y
+     * @return created body
+     */
     private Body addHead(int x, int y) {
         if (this.snakeBody.size() != 0) {
             this.snakeBody.getLast().setColor(Colors.snakeBody);
@@ -110,14 +153,28 @@ public class Snake {
         return producedSnakeBody;
     }
 
+    /**
+     * Check if it can reproduce
+     * @return can reproduce
+     */
     private boolean canReproduce() {
         return this.snakeBody.size() >= Snake.reproduceSize;
     }
 
+    /**
+     * Check if it can move
+     * @param information
+     * @return can move
+     */
     private boolean canMove(LocalInformation information) {
         return !information.getFreeDirections().isEmpty();
     }
 
+    /**
+     * Check if it can attack
+     * @param information
+     * @return can attack
+     */
     private boolean canAttack(LocalInformation information) {
         return information.canAttackFood();
     }

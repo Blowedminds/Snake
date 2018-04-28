@@ -19,6 +19,9 @@ public class ApplicationWindow {
 	    initialize();
 	}
 
+	/**
+	 * Initialize JFrame
+	 */
 	private void initialize() {
 		frame = new JFrame();
 		frame.setResizable(false);
@@ -28,6 +31,10 @@ public class ApplicationWindow {
 		frame.pack();
 	}
 
+    /**
+     * get Frame
+     * @return
+     */
 	public JFrame getFrame() {
 	    return frame;
     }

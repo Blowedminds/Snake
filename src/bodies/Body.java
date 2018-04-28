@@ -22,18 +22,35 @@ public class Body implements Drawable {
         panel.drawSquare(this.point.getX(), this.point.getY(), this.color);
     }
 
+    /**
+     * get X
+     * @return x
+     */
     public int getX() {
         return this.point.getX();
     }
 
+    /**
+     * get Y
+     * @return y
+     */
     public int getY() {
         return this.point.getY();
     }
 
+    /**
+     * set X and Y
+     * @param x
+     * @param y
+     */
     public void setLocation(int x, int y) {
         this.point.setLocation(x, y);
     }
 
+    /**
+     * set the Color
+     * @param color
+     */
     public void setColor(Color color) {
         this.color = color;
     }

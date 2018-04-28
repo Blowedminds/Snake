@@ -23,10 +23,16 @@ public class LocalInformation {
         return this.freeDirections;
     }
 
+    /**
+     * Find the optimal way going to Food for the given poing
+     * @param point
+     * @return optimal Direction
+     */
     public Direction getOptimizedFoodDirection(Point point) {
+        // Get difference between this point and food
         int dx = point.getX() - this.food.getX();
         int dy = -(point.getY() - this.food.getY());
-
+        //Find out food quadrant
         int foodQuadrant = this.getFoodCoordinateQuadrant(dx, dy);
 
         dx = Math.abs(dx);
@@ -34,7 +40,9 @@ public class LocalInformation {
 
         Direction direction;
 
+        //If x is bigger than y, then move in the x axis, otherwise y axis
         if (dx - dy >= 0) {
+            //According to foodQuadrant move in the right or left direction, If foodQuadrant is 0 then move in the random direction
             if (foodQuadrant == 1 || foodQuadrant == 4) {
                 direction = Direction.RIGHT;
             } else if(foodQuadrant == 2 || foodQuadrant == 3){
@@ -43,6 +51,7 @@ public class LocalInformation {
                 direction = LocalInformation.getRandomDirection(this.freeDirections);
             }
         } else {
+            //According to foodQuadrant move in the up or down direction, If foodQuadrant is 0 then move in the random direction
             if(foodQuadrant == 1 || foodQuadrant == 2) {
                 direction = Direction.UP;
             } else if( foodQuadrant == 3 || foodQuadrant == 4){
@@ -52,6 +61,7 @@ public class LocalInformation {
             }
         }
 
+        //If the selected direction is not null, then move in the one of the free direction
         if(this.bodies.get(direction) != null) {
             return LocalInformation.getRandomDirection(this.freeDirections);
         }
@@ -59,21 +69,22 @@ public class LocalInformation {
         return direction;
     }
 
+    /**
+     * Check if food is near
+     *
+     * @return is food near
+     */
     public boolean canAttackFood() {
-        Iterator iterator = this.bodies.entrySet().iterator();
-
-        while(iterator.hasNext()) {
-            Map.Entry pair = (Map.Entry) iterator.next();
-
-            if(pair.getValue() instanceof Food) {
-                return true;
-            }
-        }
-        return false;
+        return this.getFoodDirection() != null;
     }
 
+    /**
+     * Looks up every Direction, If food exists return it, otherwise return null
+     * @return food Direction
+     */
     public Direction getFoodDirection(  ) {
 
+        //Check for eah direction
         for(Direction direction: Direction.values()) {
             if(bodies.get(direction) instanceof Food) {
                 return direction;
@@ -83,6 +94,12 @@ public class LocalInformation {
         return null;
     }
 
+    /**
+     * Find out Food Quadrant according to this point
+     * @param dx
+     * @param dy
+     * @return food quadrant
+     */
     private int getFoodCoordinateQuadrant(int dx, int dy) {
         if (dx <= 0 && dy < 0) {
             return 1;

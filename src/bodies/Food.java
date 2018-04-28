@@ -1,6 +1,6 @@
 package bodies;
 
-import game.Colors;
+import ui.Colors;
 
 public class Food extends Body{
 

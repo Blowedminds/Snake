@@ -1,7 +1,5 @@
 package ui;
 
-import game.Colors;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
