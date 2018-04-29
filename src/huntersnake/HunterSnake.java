@@ -30,13 +30,20 @@ public class HunterSnake extends GridGame {
         this.addDrawable(this.food);
     }
 
+    /**
+     * Define the functionality of the game executed after each timer clock
+     */
     @Override
     protected void timerTick() {
-        // Determine and execute actions for all bodies
+        /**
+         * While we are iterating over snakes, we cannot add some new snakes to original List due to uncompleted iteration.
+         * So we clone our original snake object
+         *
+         */
         ArrayList<Snake> snakeCopy = new ArrayList<>(this.snakes);
 
         //This will be our condition to stop the game, If it reaches to snakes size, then stop the game
-        int stoppedSnake = 0;
+        int stayedSnake = 0;
 
         for (Snake snake : snakeCopy) {
             // Choose action
@@ -45,7 +52,7 @@ public class HunterSnake extends GridGame {
             if (action.getType() == Action.Type.STAY) {
                 // STAY
                 snake.stay();
-                stoppedSnake++;
+                stayedSnake++;
             } else if (action.getType() == Action.Type.REPRODUCE) {
                 // REPRODUCE
                 //Firstly remove snake
@@ -73,7 +80,7 @@ public class HunterSnake extends GridGame {
             }
         }
 
-        if(this.snakes.size() == stoppedSnake) {
+        if (this.snakes.size() == stayedSnake) {
             System.out.println("There is left no move, game is stopped");
             this.stop();
         }
@@ -81,6 +88,7 @@ public class HunterSnake extends GridGame {
 
     /**
      * Create LocalInformation for the snake
+     *
      * @param snake
      * @return LocalInformation for the snake
      */
@@ -98,16 +106,16 @@ public class HunterSnake extends GridGame {
         bodies.put(Direction.RIGHT, this.getBodyAtPosition(x + 1, y));
         //Find free directions
         ArrayList<Direction> freeDirections = new ArrayList<>();
-        if (this.isDirectionFree(x, y , Direction.UP)) {
+        if (this.isDirectionFree(x, y, Direction.UP)) {
             freeDirections.add(Direction.UP);
         }
-        if (this.isDirectionFree(x, y , Direction.DOWN)) {
+        if (this.isDirectionFree(x, y, Direction.DOWN)) {
             freeDirections.add(Direction.DOWN);
         }
-        if (this.isDirectionFree(x, y , Direction.LEFT)) {
+        if (this.isDirectionFree(x, y, Direction.LEFT)) {
             freeDirections.add(Direction.LEFT);
         }
-        if (this.isDirectionFree(x, y , Direction.RIGHT)) {
+        if (this.isDirectionFree(x, y, Direction.RIGHT)) {
             freeDirections.add(Direction.RIGHT);
         }
 
@@ -116,6 +124,7 @@ public class HunterSnake extends GridGame {
 
     /**
      * Add snake to drawables
+     *
      * @param snake
      */
     public void addSnake(Snake snake) {
@@ -134,6 +143,7 @@ public class HunterSnake extends GridGame {
 
     /**
      * Remove snake from drawables
+     *
      * @param snake
      */
     private void removeSnake(Snake snake) {
@@ -151,6 +161,7 @@ public class HunterSnake extends GridGame {
 
     /**
      * Update snake current location with its body
+     *
      * @param snakeBody
      */
     private void updateSnakeCurrentLocation(LinkedList<Body> snakeBody) {
@@ -161,6 +172,7 @@ public class HunterSnake extends GridGame {
 
     /**
      * Update snake current location with the given updateBody
+     *
      * @param snakeBody
      * @param updateBody
      */
@@ -172,6 +184,7 @@ public class HunterSnake extends GridGame {
 
     /**
      * Check if given position is inside grid
+     *
      * @param x
      * @param y
      * @return inside grid
@@ -182,6 +195,7 @@ public class HunterSnake extends GridGame {
 
     /**
      * Check if given direction is free
+     *
      * @param x
      * @param y
      * @param direction
@@ -202,6 +216,7 @@ public class HunterSnake extends GridGame {
 
     /**
      * Fill the given position with given body
+     *
      * @param x
      * @param y
      * @param body
@@ -214,6 +229,7 @@ public class HunterSnake extends GridGame {
 
     /**
      * Check if given position is free
+     *
      * @param x
      * @param y
      * @return
@@ -224,6 +240,7 @@ public class HunterSnake extends GridGame {
 
     /**
      * get body at position
+     *
      * @param x
      * @param y
      * @return body at position
@@ -250,7 +267,7 @@ public class HunterSnake extends GridGame {
 
         //Loop until random position is free
         while (!isPositionFree(x, y)) {
-            if(loop_time > 10) {
+            if (loop_time > 10) {
                 Point empty_set = this.findEmptyPlace();
 
                 x = empty_set.getX();
@@ -271,13 +288,14 @@ public class HunterSnake extends GridGame {
     }
 
     /**
-     * Find an empty place
+     * Find an empty point
+     *
      * @return empty point
      */
     private Point findEmptyPlace() {
-        for(int y = this.getGridHeight() - 1; y > 0; y--) {
-            for(int x = this.getGridWidth() - 1; x > 0; x--) {
-                if(this.bodiesMap[x][y] == null) {
+        for (int y = this.getGridHeight() - 1; y > 0; y--) {
+            for (int x = this.getGridWidth() - 1; x > 0; x--) {
+                if (this.bodiesMap[x][y] == null) {
                     return new Point(x, y);
                 }
             }

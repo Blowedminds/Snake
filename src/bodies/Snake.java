@@ -20,12 +20,13 @@ public class Snake {
 
         //Set the bodies for the given points
         for (Point point : points) {
-            this.addHead(point.getX(), point.getY());
+            this.addHead(point);
         }
     }
 
     /**
      * get Snake Body
+     *
      * @return snake body
      */
     public LinkedList<Body> getSnakeBody() {
@@ -34,17 +35,19 @@ public class Snake {
 
     /**
      * Choose an appropriate action for the given LocalInformation
+     *
      * @param information
      * @return appropriate action
      */
     public Action chooseAction(LocalInformation information) {
-        Body snakeHead = this.snakeBody.getLast();
 
         if (this.canReproduce()) {
             return new Action(Action.Type.REPRODUCE);
         } else if (this.canAttack(information)) {
             return new Action(Action.Type.ATTACK, information.getFoodDirection());
         } else if (this.canMove(information)) {
+            Body snakeHead = this.snakeBody.getLast();
+
             return new Action(Action.Type.MOVE, information.getOptimizedFoodDirection(new Point(snakeHead.getX(), snakeHead.getY())));
         }
 
@@ -54,6 +57,7 @@ public class Snake {
 
     /**
      * Reproduce the snake
+     *
      * @return reproduced snake
      */
     public Snake reproduce() {
@@ -61,19 +65,20 @@ public class Snake {
         //Create a point array for the new snake
         Point[] points = new Point[Snake.reproduceSize / 2];
 
-        //Halve the snake and assign the removed points to new points
+        //Halve the snake and assign the removed points to array
         for (int i = Snake.reproduceSize / 2 - 1; this.snakeBody.size() > Snake.reproduceSize / 2; i--) {
 
             Body body = this.snakeBody.remove(0);
 
             points[i] = new Point(body.getX(), body.getY());
         }
-
+        //Create a new snake with these points
         return new Snake(points);
     }
 
     /**
      * Move the whole snake body to desired direction
+     *
      * @param direction
      */
     public void move(Direction direction) {
@@ -81,7 +86,7 @@ public class Snake {
         Iterator<Body> iterator = this.snakeBody.iterator();
 
         Body body = iterator.next();
-        //Move every body to ancestor
+        //Move every body to ancestor except head
         while (iterator.hasNext()) {
 
             Body nextBody = iterator.next();
@@ -97,6 +102,7 @@ public class Snake {
 
     /**
      * Add one body to snake body, and move it to desired direction
+     *
      * @param direction
      * @return new head
      */
@@ -104,7 +110,7 @@ public class Snake {
         //Get head
         Body snakeHead = this.snakeBody.getLast();
         //Add new head with snake head coordinate
-        snakeHead = this.addHead(snakeHead.getX(), snakeHead.getY());
+        snakeHead = this.addHead(new Point(snakeHead.getX(), snakeHead.getY()));
         //move the new head to direction
         this.moveBodyToDirection(snakeHead, direction);
 
@@ -120,6 +126,7 @@ public class Snake {
 
     /**
      * Move the body to desired direction
+     *
      * @param body
      * @param direction
      */
@@ -137,17 +144,18 @@ public class Snake {
 
     /**
      * Add a body to head
-     * @param x
-     * @param y
+     *
+     * @param point
      * @return created body
      */
-    private Body addHead(int x, int y) {
+    private Body addHead(Point point) {
+        //Set current head color to body color
         if (this.snakeBody.size() != 0) {
             this.snakeBody.getLast().setColor(Colors.snakeBody);
         }
-
-        Body producedSnakeBody = new Body(x, y, Colors.snakeHead);
-
+        //Create a new body
+        Body producedSnakeBody = new Body(point.getX(), point.getY(), Colors.snakeHead);
+        //Add to head
         this.snakeBody.add(producedSnakeBody);
 
         return producedSnakeBody;
@@ -155,6 +163,7 @@ public class Snake {
 
     /**
      * Check if it can reproduce
+     *
      * @return can reproduce
      */
     private boolean canReproduce() {
@@ -163,6 +172,7 @@ public class Snake {
 
     /**
      * Check if it can move
+     *
      * @param information
      * @return can move
      */
@@ -172,6 +182,7 @@ public class Snake {
 
     /**
      * Check if it can attack
+     *
      * @param information
      * @return can attack
      */

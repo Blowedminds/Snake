@@ -25,6 +25,7 @@ public class LocalInformation {
 
     /**
      * Find the optimal way going to Food for the given poing
+     *
      * @param point
      * @return optimal Direction
      */
@@ -45,16 +46,16 @@ public class LocalInformation {
             //According to foodQuadrant move in the right or left direction, If foodQuadrant is 0 then move in the random direction
             if (foodQuadrant == 1 || foodQuadrant == 4) {
                 direction = Direction.RIGHT;
-            } else if(foodQuadrant == 2 || foodQuadrant == 3){
+            } else if (foodQuadrant == 2 || foodQuadrant == 3) {
                 direction = Direction.LEFT;
             } else {
                 direction = LocalInformation.getRandomDirection(this.freeDirections);
             }
         } else {
             //According to foodQuadrant move in the up or down direction, If foodQuadrant is 0 then move in the random direction
-            if(foodQuadrant == 1 || foodQuadrant == 2) {
+            if (foodQuadrant == 1 || foodQuadrant == 2) {
                 direction = Direction.UP;
-            } else if( foodQuadrant == 3 || foodQuadrant == 4){
+            } else if (foodQuadrant == 3 || foodQuadrant == 4) {
                 direction = Direction.DOWN;
             } else {
                 direction = LocalInformation.getRandomDirection(this.freeDirections);
@@ -62,7 +63,7 @@ public class LocalInformation {
         }
 
         //If the selected direction is not null, then move in the one of the free direction
-        if(this.bodies.get(direction) != null) {
+        if (this.bodies.get(direction) != null) {
             return LocalInformation.getRandomDirection(this.freeDirections);
         }
 
@@ -80,13 +81,14 @@ public class LocalInformation {
 
     /**
      * Looks up every Direction, If food exists return it, otherwise return null
+     *
      * @return food Direction
      */
-    public Direction getFoodDirection(  ) {
+    public Direction getFoodDirection() {
 
-        //Check for eah direction
-        for(Direction direction: Direction.values()) {
-            if(bodies.get(direction) instanceof Food) {
+        //Check for each direction
+        for (Direction direction : Direction.values()) {
+            if (bodies.get(direction) instanceof Food) {
                 return direction;
             }
         }
@@ -96,6 +98,7 @@ public class LocalInformation {
 
     /**
      * Find out Food Quadrant according to this point
+     *
      * @param dx
      * @param dy
      * @return food quadrant
@@ -117,6 +120,7 @@ public class LocalInformation {
     /**
      * Utility function to get a randomly selected direction among multiple directions.
      * The selection is uniform random: All directions in the list have an equal chance to be chosen.
+     *
      * @param possibleDirections list of possible directions
      * @return direction randomly selected from the list of possible directions
      */
@@ -124,7 +128,7 @@ public class LocalInformation {
         if (possibleDirections.isEmpty()) {
             return null;
         }
-        int randomIndex = (int)(Math.random() * possibleDirections.size());
+        int randomIndex = (int) (Math.random() * possibleDirections.size());
         return possibleDirections.get(randomIndex);
     }
 

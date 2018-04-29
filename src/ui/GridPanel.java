@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
  * A drawable panel structured as a grid.
  * Provides some drawing methods suitable for pixel-like GridGame entities.
  *
- * IMPORTANT: Please do not modify this class in any way,
  * it will be reset when grading your project.
  */
 public class GridPanel extends JPanel {
@@ -23,8 +22,9 @@ public class GridPanel extends JPanel {
 
     /**
      * Constructs a grid panel that can be drawn on
-     * @param gridWidth width of the grid
-     * @param gridHeight height of the grid
+     *
+     * @param gridWidth      width of the grid
+     * @param gridHeight     height of the grid
      * @param gridSquareSize size of a grid square in pixels
      */
     public GridPanel(int gridWidth, int gridHeight, int gridSquareSize) {
@@ -60,6 +60,7 @@ public class GridPanel extends JPanel {
 
     /**
      * Returns the number of grid squares along the width
+     *
      * @return grid width
      */
     public int getGridWidth() {
@@ -68,6 +69,7 @@ public class GridPanel extends JPanel {
 
     /**
      * Returns the number of grid squares along the height
+     *
      * @return grid height
      */
     public int getGridHeight() {
@@ -96,6 +98,7 @@ public class GridPanel extends JPanel {
 
     /**
      * Draws a filled square in the given grid position
+     *
      * @param gridX x position
      * @param gridY y position
      * @param color fill color of the square

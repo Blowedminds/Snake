@@ -11,6 +11,7 @@ public class Point {
 
     /**
      * get X
+     *
      * @return x
      */
     public int getX() {
@@ -19,13 +20,14 @@ public class Point {
 
     /**
      * get Y
+     *
      * @return y
      */
     public int getY() {
         return this.y;
     }
 
-    public void setLocation(int x, int y){
+    public void setLocation(int x, int y) {
         this.x = x;
         this.y = y;
     }
