@@ -44,18 +44,18 @@ public class LocalInformation {
         //If x is bigger than y, then move in the x axis, otherwise y axis
         if (dx - dy >= 0) {
             //According to foodQuadrant move in the right or left direction, If foodQuadrant is 0 then move in the random direction
-            if (foodQuadrant == 1 || foodQuadrant == 4) {
+            if ((foodQuadrant == 1 || foodQuadrant == 4) && this.isDirectionFree(Direction.RIGHT)) {
                 direction = Direction.RIGHT;
-            } else if (foodQuadrant == 2 || foodQuadrant == 3) {
+            } else if ((foodQuadrant == 2 || foodQuadrant == 3)  && this.isDirectionFree(Direction.LEFT)) {
                 direction = Direction.LEFT;
             } else {
                 direction = LocalInformation.getRandomDirection(this.freeDirections);
             }
         } else {
             //According to foodQuadrant move in the up or down direction, If foodQuadrant is 0 then move in the random direction
-            if (foodQuadrant == 1 || foodQuadrant == 2) {
+            if ((foodQuadrant == 1 || foodQuadrant == 2)  && this.isDirectionFree(Direction.UP)) {
                 direction = Direction.UP;
-            } else if (foodQuadrant == 3 || foodQuadrant == 4) {
+            } else if ((foodQuadrant == 3 || foodQuadrant == 4) && this.isDirectionFree(Direction.DOWN)) {
                 direction = Direction.DOWN;
             } else {
                 direction = LocalInformation.getRandomDirection(this.freeDirections);
@@ -115,6 +115,17 @@ public class LocalInformation {
         }
 
         return 0;
+    }
+
+    private boolean isDirectionFree(Direction direction) {
+
+        for(Direction _direction: this.freeDirections) {
+            if(_direction == direction) {
+                return true;
+            }
+        }
+
+        return  false;
     }
 
     /**

@@ -14,7 +14,7 @@ public class Main {
             try {
                 // Create GridGame
                 // You can change the world width and height, size of each grid square in pixels or the GridGame speed
-                HunterSnake game = new HunterSnake(50, 50, 10, 120);
+                HunterSnake game = new HunterSnake(50, 50, 10, 240);
 
                 for (int i = 0; i < 1; i++) {
 

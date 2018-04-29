@@ -71,6 +71,8 @@ public class HunterSnake extends GridGame {
                     snake.move(action.getDirection());
                     //Update with new point
                     updateSnakeCurrentLocation(snake.getSnakeBody());
+                }else {
+                    System.out.println("hey");
                 }
             } else if (action.getType() == Action.Type.ATTACK) {
                 //Add the produced body
@@ -106,16 +108,16 @@ public class HunterSnake extends GridGame {
         bodies.put(Direction.RIGHT, this.getBodyAtPosition(x + 1, y));
         //Find free directions
         ArrayList<Direction> freeDirections = new ArrayList<>();
-        if (this.isDirectionFree(x, y, Direction.UP)) {
+        if (this.isPointMovable(new Point(x, y - 1))) {
             freeDirections.add(Direction.UP);
         }
-        if (this.isDirectionFree(x, y, Direction.DOWN)) {
+        if (this.isPointMovable(new Point(x, y + 1))) {
             freeDirections.add(Direction.DOWN);
         }
-        if (this.isDirectionFree(x, y, Direction.LEFT)) {
+        if (this.isPointMovable(new Point(x - 1, y))) {
             freeDirections.add(Direction.LEFT);
         }
-        if (this.isDirectionFree(x, y, Direction.RIGHT)) {
+        if (this.isPointMovable(new Point(x + 1, y))) {
             freeDirections.add(Direction.RIGHT);
         }
 
@@ -139,6 +141,31 @@ public class HunterSnake extends GridGame {
             this.addDrawable(body);
             this.bodiesMap[body.getX()][body.getY()] = body;
         }
+    }
+
+
+    private boolean isPointMovable(Point point) {
+
+        int x = point.getX();
+        int y = point.getY();
+
+        if(!this.isPositionFree(x, y)) {
+            return false;
+        }
+        if (this.isDirectionFree(x, y, Direction.UP)) {
+            return true;
+        }
+        if (this.isDirectionFree(x, y, Direction.DOWN)) {
+            return true;
+        }
+        if (this.isDirectionFree(x, y, Direction.LEFT)) {
+            return true;
+        }
+        if (this.isDirectionFree(x, y, Direction.RIGHT)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
